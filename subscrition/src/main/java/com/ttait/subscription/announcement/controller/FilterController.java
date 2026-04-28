@@ -22,9 +22,19 @@ public class FilterController {
         return announcementQueryService.regionLevel1Options();
     }
 
+    @GetMapping("/regions/level2")
+    public FilterOptionResponse regionLevel2Options() {
+        return announcementQueryService.regionLevel2Options();
+    }
+
     @GetMapping("/supply-types")
     public FilterOptionResponse supplyTypeOptions() {
         return announcementQueryService.supplyTypeOptions();
+    }
+
+    @GetMapping("/house-types")
+    public FilterOptionResponse houseTypeOptions() {
+        return announcementQueryService.houseTypeOptions();
     }
 
     @GetMapping("/providers")

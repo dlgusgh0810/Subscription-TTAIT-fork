@@ -26,18 +26,32 @@ public class AnnouncementController {
     @GetMapping
     public Page<AnnouncementListItemResponse> getAnnouncements(
             @RequestParam(required = false) String regionLevel1,
+            @RequestParam(required = false) String regionLevel2,
             @RequestParam(required = false) String supplyType,
+            @RequestParam(required = false) String houseType,
             @RequestParam(required = false) String provider,
             @RequestParam(required = false) String status,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long minDeposit,
+            @RequestParam(required = false) Long maxDeposit,
+            @RequestParam(required = false) Long minMonthlyRent,
+            @RequestParam(required = false) Long maxMonthlyRent,
             @RequestParam(required = false) List<CategoryCode> categories,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
         return announcementQueryService.getAnnouncements(
                 regionLevel1,
+                regionLevel2,
                 supplyType,
+                houseType,
                 provider,
                 status,
+                keyword,
+                minDeposit,
+                maxDeposit,
+                minMonthlyRent,
+                maxMonthlyRent,
                 categories,
                 PageRequest.of(page, size)
         );
