@@ -126,6 +126,7 @@ public class AnnouncementEligibility extends BaseTimeEntity {
         this.reviewStatus = ParseReviewStatus.PENDING;
     }
 
+    // AI 재파싱 결과로 자격조건 전체 갱신 (검수 상태는 건드리지 않음)
     public void update(Integer ageMin, Integer ageMax, String ageRawText,
                        MaritalTargetType maritalTargetType, Integer marriageYearLimit, String maritalRawText,
                        Integer childrenMinCount, String childrenRawText,
@@ -152,12 +153,15 @@ public class AnnouncementEligibility extends BaseTimeEntity {
         this.specialSupplyRaw = specialSupplyRaw;
     }
 
+    // AI 파싱 결과가 정확하다고 판단 → APPROVED 확정, 검수자 정보 기록
     public void approve(String reviewerLoginId) {
         this.reviewStatus = ParseReviewStatus.APPROVED;
         this.reviewedBy = reviewerLoginId;
         this.reviewedAt = LocalDateTime.now();
     }
 
+    // AI 파싱 오류 필드만 수정 후 CORRECTED 확정
+    // null인 파라미터는 기존 값 유지 — 수정할 항목만 전달하는 부분 수정 방식
     public void correct(String reviewerLoginId, String note,
                         Integer ageMin, Integer ageMax, MaritalTargetType maritalTargetType,
                         Integer marriageYearLimit, Integer childrenMinCount,
@@ -178,6 +182,7 @@ public class AnnouncementEligibility extends BaseTimeEntity {
         this.reviewNote = note;
     }
 
+    // AI 파싱 품질이 너무 낮거나 공고 자체가 부적절 → REJECTED, 사유 기록
     public void reject(String reviewerLoginId, String note) {
         this.reviewStatus = ParseReviewStatus.REJECTED;
         this.reviewedBy = reviewerLoginId;
@@ -185,6 +190,7 @@ public class AnnouncementEligibility extends BaseTimeEntity {
         this.reviewNote = note;
     }
 
+    // REIMPORT 액션 후 호출 — 재수집·재파싱이 완료됐으므로 검수 상태를 PENDING으로 초기화
     public void resetToPending() {
         this.reviewStatus = ParseReviewStatus.PENDING;
         this.reviewedBy = null;
